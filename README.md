@@ -3,13 +3,13 @@
 
 ## Escalamiento en Azure con Maquinas Virtuales, Sacale Sets y Service Plans
 
-##Comandos 
+## Comandos 
 
-Si estas en windows y te retorna un permiso denegado user@52.247.127.6: Permission denied (publickey).
+Si estas en windows y te retorna un permiso denegado user@host: Permission denied (publickey).
 
       ssh-i ~/.ssh/private_key username@host
       
-Si es en linux recuerda que puede ser por no dar permisos al archivo de llave privada puedes usasr chmod 400, 
+Si es en linux, recuerda que puede ser por no dar permisos al archivo de llave privada, puedes usasr chmod 400.
       
 ### Dependencias
 * Cree una cuenta gratuita dentro de Azure. Para hacerlo puede guiarse de esta [documentación](https://azure.microsoft.com/en-us/free/search/?&ef_id=Cj0KCQiA2ITuBRDkARIsAMK9Q7MuvuTqIfK15LWfaM7bLL_QsBbC5XhJJezUbcfx-qAnfPjH568chTMaAkAsEALw_wcB:G:s&OCID=AID2000068_SEM_alOkB9ZE&MarinID=alOkB9ZE_368060503322_%2Bazure_b_c__79187603991_kwd-23159435208&lnkd=Google_Azure_Brand&dclid=CjgKEAiA2ITuBRDchty8lqPlzS4SJAC3x4k1mAxU7XNhWdOSESfffUnMNjLWcAIuikQnj3C4U8xRG_D_BwE). Al hacerlo usted contará con $200 USD para gastar durante 1 mes.
