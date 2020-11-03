@@ -1,6 +1,12 @@
 ### Escuela Colombiana de Ingeniería
 ### Arquitecturas de Software - ARSW
 
+## Integrantes 
+
+Juan Sebastian Nieto Molina
+
+Juan Manuel Herrera Moya
+
 ## Escalamiento en Azure con Maquinas Virtuales, Sacale Sets y Service Plans
 
 ## Comandos 
@@ -150,22 +156,88 @@ NOTA: No olvidar correr el siguiente comando otra vez:
 
 
 12. Evalue el escenario de calidad asociado al requerimiento no funcional de escalabilidad y concluya si usando este modelo de escalabilidad logramos cumplirlo.
+
+      >- Al cambiar el tamaño a `B2ms`hubo un comportamiento positivo, pero no fue significante teniendo en cuenta el costo que tiene hacer dicho cambio, el porcentaje de uso de CPU mejora un 2% aproximadamente y el tiempo mejora en 5 segundos. Ahora, el objetivo si se está cumpliendo al implementar escalabilidad vertical, pero sentimos que no aprovecha al 100% los nuevos recursos para hacer un mejor trabajo. 
+      
+      
 13. Vuelva a dejar la VM en el tamaño inicial para evitar cobros adicionales.
 
 **Preguntas**
 
 1. ¿Cuántos y cuáles recursos crea Azure junto con la VM?
+
+      >- Por maquina Azure cera 6 recursos, los cuales son:
+      
+            Red virtual
+            Máquina virtual
+            Dirección IP pública
+            Grupo de seguridad de red
+            La intefaz de red
+            Disco
+
 2. ¿Brevemente describa para qué sirve cada recurso?
+
+      >- Red virtual: Permite que recursos de Azure, como Azure Virtual Machines (VM), se comuniquen de forma segura entre sí, Internet y redes locales. La red virtual es similar a una red tradicional que operaría en su propio centro de datos, pero aporta beneficios adicionales de la infraestructura de Azure, como la escala, la disponibilidad y el aislamiento.
+      >- Máquina virtual: Proporciona un espacio de nombres único para los datos de Azure Storage a los que se puede acceder desde cualquier lugar del mundo a través de HTTP o HTTPS. 
+      >- Grupo de seguridad de red: Puede usar un grupo de seguridad de red de Azure para filtrar el tráfico de red hacia y desde los recursos de Azure en una red virtual de Azure.
+      >- Dirección de IP pública: Las direcciones IP públicas permiten que los recursos de Azure se comuniquen con Internet y los servicios de Azure orientados al público
+      >- La interfaz de red: . Una interfaz de red permite que una máquina virtual de Azure se comunique con Internet, Azure y los recursos locales.
+      >- Disco: El tamaño de la máquina virtual determina cuántos discos de datos puede adjuntar.
+      
 3. ¿Al cerrar la conexión ssh con la VM, por qué se cae la aplicación que ejecutamos con el comando `npm FibonacciApp.js`? ¿Por qué debemos crear un *Inbound port rule* antes de acceder al servicio?
+      >- Lo que nosotros hacemos al conectarnos remotamente con la maquina por medio de llaves publicas y privadas, por medio de protocolo ssh para ser mas especifico, es hacer una conección con los recursos de esta máquina, pero cuando se va a ejecutar un comando se inicia o cierra la conexion, lo que hace es crar una instancia de ello, por eso no vive cuando la conexión se cierra.
+Debemos crear un Inbound port rule, porque necesitamos tener un puerto al cual se pueda conectar nuestra aplicación, en particular se escoge el 3000.
+
 4. Adjunte tabla de tiempos e interprete por qué la función tarda tando tiempo.
+            
+            Número	B1ls	B2ms
+            1000000	27.62	23.39
+            1010000	28.20	24.03
+            1020000	28.82	23.91
+            1030000	29.50	25.33
+            1040000	30.05	26.10
+            1050000	30.68	25.93
+            1060000	31.12	26.48
+            1070000	31.79	26.79
+            1080000	32.74	27.29
+            1090000	33.55	27.28
+
 5. Adjunte imágen del consumo de CPU de la VM e interprete por qué la función consume esa cantidad de CPU.
+
+      >- Esta imagen es cuando tenemos B1ls, y la razón principal del consumo de CPU es que el proceso de cálculo es secuencial y no aprovecha las propiedad de la programación dinámica ya que al ingresar otro número el cálculo se debe hacer completamente desde cero y repite operaciones. 
+![Imágen 1](images/part1/img8.1.PNG)
+
 6. Adjunte la imagen del resumen de la ejecución de Postman. Interprete:
+
+    * Esta imagen es cuando tenemos B1ls-
     * Tiempos de ejecución de cada petición.
+      Como se ve en la imgaen hubo un tiempo promedio de 27 segundos.
     * Si hubo fallos documentelos y explique.
+    Como se ve en la imagen no hubo fallos.
+
+![Imágen 1](images/part1/img9.PNG)
+    
 7. ¿Cuál es la diferencia entre los tamaños `B2ms` y `B1ls` (no solo busque especificaciones de infraestructura)?
+
+      >- Primero entendamos que son estos tamaños, los tamaños de VM de uso general proporcionan una relación equilibrada entre CPU y memoria. Ideal para desarrollo y pruebas, bases de datos pequeñas o medianas, y servidores web de tráfico bajo o medio. Las máquinas virtuales ampliables de la serie B son idóneas para cargas de trabajo que no necesitan un rendimiento completo de la CPU de forma continua, como los servidores web, pequeñas bases de datos y entornos de desarrollo y de prueba.
+Lo primero que vemos es la diferencia de sus componentes, por lo cual el tamaño B1ls tiene menos capacidad para ejecutar operaciones que la B2ms y se ve evidenciado en su precio.
+
+            Tamaño de máquina	      Familia	    vCPU	RAM(GIB)	Discos de datos	E/S máximo por segundo	Almacenamiento temporal(GIB)	Disco prémium	Costo/mes
+                  B2ms	            Uso general	      2	    8	            4	                  1920	                  16	               Se admite	60.74 US$
+                  B1ls        	Uso general	      1	   0.5	      2	                  160	                  4	               Se admite	3.80  US$
+
 8. ¿Aumentar el tamaño de la VM es una buena solución en este escenario?, ¿Qué pasa con la FibonacciApp cuando cambiamos el tamaño de la VM?
+
+      >- Hablando tecnicamente pudo mejorar los tiempos de ejecución, el porcentaje de CPU mejoro, pero fue muy poco a comparación de B1ls, ademas no se justifica pagar casi 20 veces más por mejoras tan leves, tal vez es porque no aprobecha todos sus nuevos recursos.
+      
 9. ¿Qué pasa con la infraestructura cuando cambia el tamaño de la VM? ¿Qué efectos negativos implica?
+
+      >- El principal efecto es que esta se reinicia, debemos volver a ejectuar programas que ya teniamos corriendo, como volver a ejectuar el comando forever start FibinacciApp.js, admas, durante este tiempo caido podemos perder las peticiones que se hagan.
+
 10. ¿Hubo mejora en el consumo de CPU o en los tiempos de respuesta? Si/No ¿Por qué?
+
+      >- Sí, aunque la mejora fue leve, un 2% con respecto a la B1ls, principalmente por los componentes que tiene, trae 2 vCPU, e indiscutiblemente más RAM, lo cual le permite ejecutar programas con mayor fluidez debido a sus capacidades, pero usando programacion dinámica podrian aprobecharse mas estos componentes e indudablemente mejorar los tiempo y el porcentanje de CPU.
+      
 11. Aumente la cantidad de ejecuciones paralelas del comando de postman a `4`. ¿El comportamiento del sistema es porcentualmente mejor?
 
 ### Parte 2 - Escalabilidad horizontal
