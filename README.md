@@ -304,37 +304,87 @@ forever start FibonacciApp.js
 
 Realice este proceso para las 3 VMs, por ahora lo haremos a mano una por una, sin embargo es importante que usted sepa que existen herramientas para aumatizar este proceso, entre ellas encontramos Azure Resource Manager, OsDisk Images, Terraform con Vagrant y Paker, Puppet, Ansible entre otras.
 
-#### Probar el resultado final de nuestra infraestructura
+## Solucion
 
-1. Porsupuesto el endpoint de acceso a nuestro sistema será la IP pública del balanceador de carga, primero verifiquemos que los servicios básicos están funcionando, consuma los siguientes recursos:
+![](images/Horizontal/1.jpg)
 
-```
-http://52.155.223.248/
-http://52.155.223.248/fibonacci/1
-```
+----------------------------------
 
-2. Realice las pruebas de carga con `newman` que se realizaron en la parte 1 y haga un informe comparativo donde contraste: tiempos de respuesta, cantidad de peticiones respondidas con éxito, costos de las 2 infraestrucruras, es decir, la que desarrollamos con balanceo de carga horizontal y la que se hizo con una maquina virtual escalada.
+![](images/Horizontal/2.jpg)
 
-3. Agregue una 4 maquina virtual y realice las pruebas de newman, pero esta vez no lance 2 peticiones en paralelo, sino que incrementelo a 4. Haga un informe donde presente el comportamiento de la CPU de las 4 VM y explique porque la tasa de éxito de las peticiones aumento con este estilo de escalabilidad.
+----------------------------------
 
-```
-newman run ARSW_LOAD-BALANCING_AZURE.postman_collection.json -e [ARSW_LOAD-BALANCING_AZURE].postman_environment.json -n 10 &
-newman run ARSW_LOAD-BALANCING_AZURE.postman_collection.json -e [ARSW_LOAD-BALANCING_AZURE].postman_environment.json -n 10 &
-newman run ARSW_LOAD-BALANCING_AZURE.postman_collection.json -e [ARSW_LOAD-BALANCING_AZURE].postman_environment.json -n 10 &
-newman run ARSW_LOAD-BALANCING_AZURE.postman_collection.json -e [ARSW_LOAD-BALANCING_AZURE].postman_environment.json -n 10
-```
+![](images/Horizontal/3.jpg)
+
+----------------------------------
+
+![](images/Horizontal/4.jpg)
+
+----------------------------------
+
+![](images/Horizontal/5.jpg)
+
+----------------------------------
+
+![](images/Horizontal/vm1.jpg)
+
+----------------------------------
+
+![](images/Horizontal/vm2.jpg)
+
+----------------------------------
+
+![](images/Horizontal/vm3.jpg)
+
+----------------------------------
+
 
 **Preguntas**
 
 * ¿Cuáles son los tipos de balanceadores de carga en Azure y en qué se diferencian?, ¿Qué es SKU, qué tipos hay y en qué se diferencian?, ¿Por qué el balanceador de carga necesita una IP pública?
+
+** 1- Equilibrio de carga de red: El equilibrio de carga de red, como su nombre indica, aprovecha la información de la capa de red para decidir dónde enviar el tráfico de red.  Esto se logra a través del Equilibrio de carga de la capa 4, que está diseñado para manejar todas las formas de tráfico TCP/UDP. El equilibrio de carga de red se considera el más rápido de todas las soluciones de equilibrio de carga, pero tiende a quedarse corto cuando se trata de equilibrar la distribución del tráfico entre servidores.
+
+** 2- Equilibrio de carga HTTP(S): El equilibrio de carga HTTP(S) es una de las formas más antiguas de equilibrio de carga. Esta forma de equilibrio de carga se basa en la capa 7, lo que significa que funciona en la capa de aplicación. El equilibrio de carga HTTP a menudo se denomina el tipo más flexible de equilibrio de carga porque le permite formar decisiones de distribución basadas en cualquier información que viene con una dirección HTTP.
+
+** 3- Equilibrio de carga interno: El equilibrio de carga interno es casi idéntico al equilibrio de carga de red, pero se puede aprovechar para equilibrar la infraestructura interna.
+
+** Tambien se pueden ver de tipo hardware, software y el usado de carga virtual
+
+
 * ¿Cuál es el propósito del *Backend Pool*?
+
+** Los back-end deben considerarse como el punto de conexión público del back-end de la aplicación. Al agregar un back-end en un grupo de servidores back-end de Front Door, también debe agregar lo siguiente:
+
+
 * ¿Cuál es el propósito del *Health Probe*?
+
+
+** Puede usar sondeos de estado para detectar el error de una aplicación en un punto de conexión de back-end. También puede generar una respuesta personalizada a un sondeo de estado y usar el sondeo de estado para el control de flujo para administrar la carga o el tiempo de inactividad planificado. Cuando se produce un error en un sondeo de estado, Load Balancer dejará de enviar nuevos flujos a la instancia en mal estado respectiva. La conectividad saliente no se ve afectada, solo se ve afectada la conectividad entrante.
+
 * ¿Cuál es el propósito de la *Load Balancing Rule*? ¿Qué tipos de sesión persistente existen, por qué esto es importante y cómo puede afectar la escalabilidad del sistema?.
+
+** Genera las reglas para el valanceador de carga sobre los tres nodos creados para esta Escalabilidad horizontal.
+
+** Este método es importante para dirigir todas las solicitudes que se originan desde un cliente lógico independiente a un servidor web de backend independiente. Los servidores backend que utilizan el almacenamiento en caché para mejorar el rendimiento, o para activar sesiones de conexión o carros de compra.
+
 * ¿Qué es una *Virtual Network*? ¿Qué es una *Subnet*? ¿Para qué sirven los *address space* y *address range*?
+
+** proceso de combinar recursos de red de hardware y software y funcionalidad de red en una única entidad administrativa basada en software, una red virtual. La virtualización de red implica la virtualización de plataformas,a menudo combinada con la virtualización de recursos.
+
+**  El subneting hace referencia a la subdivisión de una red en varias subredes 
+
+** El espacio de direcciones es la cantidad de memoria asignada para todas las direcciones
+
+** Es el tipi de red que tiene el sistema de Tipo A, B, C, D, E dependiendo el tipo hay mas o menos rangos de ips y unas son publicas y otras privdas 
+
 * ¿Qué son las *Availability Zone* y por qué seleccionamos 3 diferentes zonas?. ¿Qué significa que una IP sea *zone-redundant*?
-* ¿Cuál es el propósito del *Network Security Group*?
-* Informe de newman 1 (Punto 2)
-* Presente el Diagrama de Despliegue de la solución.
+
+** son ubicaciones físicas únicas con alimentación, red y refrigeración independientes. Cada zona de disponibilidad se compone de uno o más centros de datos y alberga infraestructura para admitir aplicaciones de alta disponibilidad y de misión crítica. Las zonas de disponibilidad son tolerantes a los errores del centro de datos mediante la redundancia y el aislamiento lógico de los servicios.
+
+** Se pusieron 3 para que el sistema tenga como soportar ciertos errores, y manterner disponibilidad 
+
+** Se pueden replicar los datos en la misma zona de la maquina "principal
 
 
 
