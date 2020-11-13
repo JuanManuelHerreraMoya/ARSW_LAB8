@@ -157,7 +157,7 @@ NOTA: No olvidar correr el siguiente comando otra vez:
 
 12. Evalue el escenario de calidad asociado al requerimiento no funcional de escalabilidad y concluya si usando este modelo de escalabilidad logramos cumplirlo.
 
-      >- Al cambiar el tamaño a `B2ms`hubo un comportamiento positivo, pero no fue significante teniendo en cuenta el costo que tiene hacer dicho cambio, el porcentaje de uso de CPU mejora un 2% aproximadamente y el tiempo mejora en 5 segundos. Ahora, el objetivo si se está cumpliendo al implementar escalabilidad vertical, pero sentimos que no aprovecha al 100% los nuevos recursos para hacer un mejor trabajo. 
+      >- Al cambiar el tamaño a `B2ms`hubo un comportamiento positivo, pero no fue significante teniendo en cuenta el costo que tiene hacer dicho cambio, el porcentaje de uso de CPU mejora un 2% aproximadamente y el tiempo mejora en 5 segundos. Ahora, el objetivo si se está cumpliendo al implementar escalabilidad vertical, pero sentimos que no aprovecha al 100% los nuevos recursos para hacer un mejor trabajo, ademas que no sirve para ejecutar procesos paralelos. 
       
       
 13. Vuelva a dejar la VM en el tamaño inicial para evitar cobros adicionales.
@@ -213,7 +213,7 @@ Debemos crear un Inbound port rule, porque necesitamos tener un puerto al cual s
     * Tiempos de ejecución de cada petición.
       Como se ve en la imgaen hubo un tiempo promedio de 27 segundos.
     * Si hubo fallos documentelos y explique.
-    Como se ve en la imagen no hubo fallos.
+    Como se ve en la imagen falla, la razon es que no puede hacer ejecuciones en paralelo.
 
 ![Imágen 1](images/part1/img9.PNG)
     
@@ -239,6 +239,8 @@ Lo primero que vemos es la diferencia de sus componentes, por lo cual el tamaño
       >- Sí, aunque la mejora fue leve, un 2% con respecto a la B1ls, principalmente por los componentes que tiene, trae 2 vCPU, e indiscutiblemente más RAM, lo cual le permite ejecutar programas con mayor fluidez debido a sus capacidades, pero usando programacion dinámica podrian aprobecharse mas estos componentes e indudablemente mejorar los tiempo y el porcentanje de CPU.
       
 11. Aumente la cantidad de ejecuciones paralelas del comando de postman a `4`. ¿El comportamiento del sistema es porcentualmente mejor?
+
+      >- Use la siguiente linea de codigo newman run ARSW_LOAD-BALANCING_AZURE.postman_collection.json -e [ARSW_LOAD-BALANCING_AZURE].postman_environment.json -n 10 & newman run ARSW_LOAD-BALANCING_AZURE.postman_collection.json -e [ARSW_LOAD-BALANCING_AZURE].postman_environment.json -n 10 & newman run ARSW_LOAD-BALANCING_AZURE.postman_collection.json -e [ARSW_LOAD-BALANCING_AZURE].postman_environment.json -n 4 y el resultado fue el miso.
 
 ### Parte 2 - Escalabilidad horizontal
 
